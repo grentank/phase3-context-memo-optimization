@@ -1,37 +1,36 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const { Post } = require('./db/models');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const postsRouter = require('./routes/postsRouter');
+const userRouter = require('./routes/userRouter');
 
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: true,
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  name: 'sid',
+  secret: process.env.SESSION_SECRET ?? 'test',
+  resave: true,
+  store: new FileStore(),
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 12,
+    httpOnly: true,
+  },
+}));
 
-app.post('/api/posts', async (req, res) => {
-  const { input } = req.body;
-  const newPost = await Post.create({ title: input });
-  res.json(newPost);
-});
+app.use('/api/posts', postsRouter);
+app.use('/api/user', userRouter);
 
-app.get('/api/posts', async (req, res) => {
-  const posts = await Post.findAll();
-  res.json(posts);
-});
-
-app.delete('/api/posts/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Post.destroy({ where: { id } });
-    res.sendStatus(200);
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
-});
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`));

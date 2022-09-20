@@ -14,7 +14,7 @@ function PostContextProvider({ children }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/posts`, { input })
+    axios.post('/api/posts', { input })
       .then((res) => {
         setPosts((prev) => [...prev, res.data]);
         setInput('');
@@ -23,13 +23,13 @@ function PostContextProvider({ children }) {
   };
 
   useEffect(() => {
-    axios(`${process.env.REACT_APP_BASEURL}/api/posts`)
+    axios('/api/posts')
       .then((res) => setPosts(res.data))
       .catch(console.log);
   }, []);
 
   const deleteHandler = useCallback((id) => {
-    axios.delete(`${process.env.REACT_APP_BASEURL}/api/posts/${id}`)
+    axios.delete(`/api/posts/${id}`)
       .then(() => setPosts((prev) => prev.filter((el) => el.id !== id)))
       .catch(console.log);
   }, []);
