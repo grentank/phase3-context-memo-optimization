@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import {
   Collapse,
@@ -12,13 +13,15 @@ import {
   Col,
   Button,
 } from 'reactstrap';
-import { UserContext } from '../../contexts/UserContext';
+import { logoutUserAsync } from '../../redux/actions/userActions';
 
 function MyNavbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
-  const { user, logoutHandler } = useContext(UserContext);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const links = user.id ? ['posts', 'effects', 'admin']
     : ['login', 'signup'];
@@ -38,7 +41,7 @@ function MyNavbar() {
               ))}
               {user.id && (
               <NavItem key="logout">
-                <Button onClick={logoutHandler}>Logout</Button>
+                <Button onClick={() => dispatch(logoutUserAsync())}>Logout</Button>
               </NavItem>
               )}
             </Nav>

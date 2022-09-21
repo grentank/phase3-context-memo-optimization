@@ -22,5 +22,6 @@ module.exports = {
     'react/prop-types': 0,
     'no-console': 0,
     'react/jsx-no-constructed-context-values': 0,
+    'default-param-last': 0,
   },
 };

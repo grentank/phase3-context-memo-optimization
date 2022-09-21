@@ -1,14 +1,15 @@
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, ListGroupItem } from 'reactstrap';
-import { HandlerContext } from '../../contexts/PostContext';
+import { deletePostAsync } from '../../redux/actions/postsActions';
 
 function PostItem({ post, id }) {
-  const { deleteHandler } = useContext(HandlerContext);
+  const dispatch = useDispatch();
   console.log('Item render');
   return (
     <ListGroupItem>
       {`${id}. ${post.title}`}
-      <Button onClick={() => deleteHandler(id)} className="danger">x</Button>
+      <Button onClick={() => dispatch(deletePostAsync(id))} className="danger">x</Button>
     </ListGroupItem>
   );
 }

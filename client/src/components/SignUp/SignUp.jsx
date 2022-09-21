@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Button, Col, Form, FormGroup, Input, Label, Row,
 } from 'reactstrap';
-import { UserContext } from '../../contexts/UserContext';
+import { signupUser } from '../../redux/actions/userActions';
 
 export default function SignUp() {
-  const { signupHandler } = useContext(UserContext);
+  const dispatch = useDispatch();
   return (
     <Row>
       <Col>
-        <Form onSubmit={(e) => signupHandler(e, Object.fromEntries(new FormData(e.target)))}>
+        <Form onSubmit={(e) => dispatch(signupUser(e, Object.fromEntries(new FormData(e.target))))}>
           <FormGroup floating>
             <Input
               id="exampleName"

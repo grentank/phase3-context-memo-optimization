@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Col,
   Form, FormGroup, Input, Label, Row,
 } from 'reactstrap';
-import { PostContext } from '../../contexts/PostContext';
+import { submitPostAsync } from '../../redux/actions/postsActions';
 
 export default function MyForm() {
-  const { submitHandler, changeHandler, input } = useContext(PostContext);
+  const [input, setInput] = useState('');
+  const dispatch = useDispatch();
+  const changeHandler = useCallback((e) => setInput(e.target.value), []);
+  const submitHandler = (e) => dispatch(submitPostAsync(e, input, setInput));
   return (
     <Row>
       <Col>

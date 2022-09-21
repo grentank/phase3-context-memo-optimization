@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import AdminPage from './components/AdminPage';
@@ -8,11 +9,17 @@ import MyNavbar from './components/MyNavbar';
 import NoPage from './components/NoPage/NoPage';
 import PostsPage from './components/PostsPage';
 import SignUp from './components/SignUp';
-import { UserContext } from './contexts/UserContext';
 import ProtectedRoute from './HOCs/ProtectedRoute';
+import { fetchPosts } from './redux/actions/postsActions';
+import { checkAuth } from './redux/actions/userActions';
 
 function App() {
-  const { user } = useContext(UserContext);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(checkAuth());
+    dispatch(fetchPosts());
+  }, []);
+  const user = useSelector((state) => state.user);
   return (
     <Container>
       <MyNavbar />
